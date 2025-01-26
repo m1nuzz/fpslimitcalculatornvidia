@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>CS2 FPS Calculator</title>
+    <script src="https://cdn.tailwindcss.com/3.3.2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-96 border border-gray-700">
+        <h1 class="text-2xl font-bold mb-4 text-gray-100">CS2 FPS Calculator</h1>
+        <input 
+            type="number" 
+            id="hzInput" 
+            placeholder="Enter Monitor Hz" 
+            class="w-full p-3 border rounded-lg mb-4 bg-gray-700 text-gray-200 border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        >
+        <button 
+            onclick="calculateFPS()" 
+            class="w-full bg-purple-700 text-white p-3 rounded-lg hover:bg-purple-800 transition-colors font-semibold"
+        >
+            Calculate FPS
+        </button>
+        <div id="results" class="mt-4 space-y-4"></div>
+    </div>
+
+    <script>
+        function calculateFPS() {
+            const hz = document.getElementById('hzInput').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!hz) {
+                resultsDiv.innerHTML = '<p class="text-red-400 text-center">Please enter monitor Hz</p>';
+                return;
+            }
+
+            // High-performance PC formula
+            const highPerformanceFPS = Math.floor((hz * 1.5 / 32) * 32);
+            const highPerformanceDriverLimit = 
+                hz >= 480 ? highPerformanceFPS + 4 : 
+                [60, 75, 100, 120, 138, 144, 150, 155, 160, 165, 170, 175, 180, 200, 240, 250, 260, 270, 275, 280, 300, 310, 360, 380, 390, 400, 480, 500, 520, 540].includes(Number(hz)) 
+                    ? highPerformanceFPS + 4 
+                    : highPerformanceFPS;
+
+            // Budget PC formula
+            const budgetPCFPS = Math.floor((hz / 32 + 1) * 32);
+            const budgetPCDriverLimit = budgetPCFPS + 4;
+
+            resultsDiv.innerHTML = `
+                <div class="bg-purple-900 p-4 rounded-lg border border-purple-800">
+                    <h3 class="font-bold text-purple-200 mb-2">High-Performance PC</h3>
+                    <p class="text-purple-300">FPS: ${highPerformanceFPS}</p>
+                    <p class="text-purple-300">Driver Limit: ${highPerformanceDriverLimit}</p>
+                </div>
+                <div class="bg-indigo-900 p-4 rounded-lg border border-indigo-800">
+                    <h3 class="font-bold text-indigo-200 mb-2">Budget PC</h3>
+                    <p class="text-indigo-300">FPS: ${budgetPCFPS}</p>
+                    <p class="text-indigo-300">Driver Limit: ${budgetPCDriverLimit}</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
